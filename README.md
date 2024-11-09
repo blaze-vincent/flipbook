@@ -3,4 +3,5 @@ frontend for animation app flipbook featuring limited toolset imposing consisten
 
 ## git flow
 develop in a feature branch, merge to release X.Y when it works, merge to main when release X.Y is complete
+<br>
 <code>feature/feature-name</code> -> <code>release/X.Y</code> -> <code>main</code>
