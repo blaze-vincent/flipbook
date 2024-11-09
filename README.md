@@ -9,3 +9,15 @@ develop in a feature branch, merge to release X.Y when it works, merge to main w
 ## design
 here is a screenshot of a figma mockup showing some of the features planned for the app
 <img src="design/mockup.png">
+
+## planned features for release 0.1
+an animation window with a constant aspect ratio of 1:1
+<br>
+a touchpad-and-button controller which will later be used to manipulate a cursor in the animation window to perform actions
+<br>
+<ul>two rows of buttons
+  <li>the top, designated for tools which impact actions in the animation window, left-aligned and allowed to overflow off the righthand side of the screen</li>
+  <li>the bottom, designated for actions which do not directly impact the animation's contents, center-aligned with items spaced between</li>
+</ul>
+<br>
+for <code>release/0.1</code>, the buttons don't need to do anything, the focus is on getting the general layout setup
