@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 void main() {
   runApp(const FlipbookApp());
@@ -9,25 +10,17 @@ class FlipbookApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       home: Scaffold(
-        body: SafeArea(
+          body: SafeArea(
           child: Column(
             children: [
-              AnimationWindow(),
-              ActionButtonSection(
-                actionButtons: [
-                  ActionButton(),
-                  ActionButton(),
-                  ActionButton(),
-                  ActionButton(),
-                  ActionButton()
-                ],
-              ),
-              ControllerSection(),
-              BottomSection()
+              const AnimationWindow(),
+              ActionButtonSection(),
+              const ControllerSection(),
+              const BottomSection()
             ],
-          ), 
+          ),
         )
       ),
     );
@@ -47,36 +40,65 @@ class _AnimationWindowState extends State<AnimationWindow> {
     return AspectRatio(
       aspectRatio: 1 / 1,
       child: Container(
-        color: Colors.amber[300],
-      ),  
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+                width: 1
+            )
+          )
+        ),
+      ),
     );
   }
 }
 
 class ActionButtonSection extends StatefulWidget {
-  //this will have a single child which can be selected, so if another is selected it will collapse the prior one
-  const ActionButtonSection({
-    super.key, 
-    required this.actionButtons  
-  });
+  //this will have a single child which can be selected,
+  //so if another is selected it will collapse the prior one
+  ActionButtonSection({super.key});
 
-  final List<ActionButton> actionButtons;
+  final List<IconData> actionButtonIcons = [
+    Symbols.brush,
+    Symbols.edit,
+    Symbols.ink_eraser,
+    Symbols.abc,
+    Symbols.select,
+    Symbols.content_copy,
+    Symbols.content_paste,
+    Symbols.resize,
+    Symbols.open_with,
+    Symbols.rotate_right
+  ];
 
   @override
   State<ActionButtonSection> createState() => _ActionButtonSectionState();
 }
 
 class _ActionButtonSectionState extends State<ActionButtonSection> {
+  int activeButtonIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 100,
+      height: 90,
       child: SizedBox.expand(
         child: Padding(
           padding: const EdgeInsets.all(10),
           child: ListView(
             scrollDirection: Axis.horizontal,
-            children: widget.actionButtons,
+            children: Iterable<int>.generate(widget.actionButtonIcons.length)
+              .map((index) => GestureDetector(
+                onTap: () {
+                  setState(() {
+                    activeButtonIndex = index;
+                  });
+                },
+                child: ActionButton(
+                  icon: widget.actionButtonIcons[index],
+                  isSelected: activeButtonIndex == index,
+                ),
+              )
+            ).toList(),
           ),
         )
       )
@@ -85,7 +107,10 @@ class _ActionButtonSectionState extends State<ActionButtonSection> {
 }
 
 class ActionButton extends StatefulWidget {
-  const ActionButton({super.key});
+  const ActionButton({super.key, required this.icon, required this.isSelected});
+
+  final IconData icon;
+  final bool isSelected;
 
   @override
   State<ActionButton> createState() => _ActionButtonState();
@@ -98,9 +123,18 @@ class _ActionButtonState extends State<ActionButton> {
       margin: const EdgeInsets.only(right: 10),
       child: AspectRatio(
         aspectRatio: 1 / 1,
-        child: Container(
-          //placeholder to display the container bounds
-          color: Colors.amber,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Container(
+            color: widget.isSelected ? Colors.amber[900] : null,
+            child: Icon(
+              widget.icon,
+              fill: 1,
+              size: 50,
+              weight: 650,
+              color: widget.isSelected ? Colors.white : Colors.amber[900],
+            ),
+          )
         )
       )
     );
@@ -116,7 +150,8 @@ class ControllerSection extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Expanded( //left buttons section
+          const Expanded(
+            //left buttons section
             child: Column(
               children: [
                 Expanded(
@@ -133,12 +168,12 @@ class ControllerSection extends StatelessWidget {
               ],
             ),
           ),
-          
-          AspectRatio( //touchpad
-            aspectRatio: 1/1,
+          AspectRatio(
+            //touchpad
+            aspectRatio: 1 / 1,
             child: Container(
               color: Colors.amberAccent,
-            ),  
+            ),
           )
         ],
       ),
@@ -153,11 +188,11 @@ class PlaceholderSquare extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-        aspectRatio: 1 / 1,
-        child: Container(
-          color: Colors.amber,
-        )
-      );
+      aspectRatio: 1 / 1,
+      child: Container(
+        color: Colors.amber,
+      )
+    );
   }
 }
 
@@ -168,7 +203,7 @@ class BottomSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SizedBox(
-      height: 100,
+      height: 90,
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Row(
